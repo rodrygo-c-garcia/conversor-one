@@ -3,13 +3,15 @@ import javax.swing.*;
 public class Inicio extends JFrame {
     private JPanel panelMain;
     private JLabel labelTitle;
+    private JComboBox<String> comboBox1;
+    private JComboBox<String> comboBox2;
 
     public Inicio() {
         super("Conversor ONE");
-        setSize(900, 500);
+        setSize(600, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
-        add(panelMain);
+        setContentPane(panelMain);
     }
 }
