@@ -5,6 +5,8 @@ public class Inicio extends JFrame {
     private JLabel labelTitle;
     private JComboBox<String> comboBox1;
     private JComboBox<String> comboBox2;
+    private JTextField txt1;
+    private JTextField txt2;
 
     public Inicio() {
         super("Conversor ONE");
