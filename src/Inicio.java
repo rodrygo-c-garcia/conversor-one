@@ -1,4 +1,10 @@
 import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Inicio extends JFrame {
     private JPanel panelMain;
@@ -15,5 +21,16 @@ public class Inicio extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setContentPane(panelMain);
+    }
+
+    public void fillCombobox(){
+        try {
+            URL url = new URL(URLEnum.API_URL.getValue());
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.connect();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
