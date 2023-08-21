@@ -21,4 +21,8 @@ public class ApiClient {
     public String getApiKey() {
         return this.apikey;
     }
+
+    public String getBaseUrl() {
+        return BASE_URL;
+    }
 }
