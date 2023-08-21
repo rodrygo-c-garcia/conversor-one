@@ -31,7 +31,6 @@ public class Inicio extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setContentPane(panelMain);
-
         //  funciones de la funcionalidad del sistema
         connectAPI();
         selectedCodeBaseCountry();
@@ -104,13 +103,15 @@ public class Inicio extends JFrame {
             codesCountry = orderCodeCountry(codesCountry);
             // crear un objeto DefaultComboBoxModel para almacenar los códigos de los países
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+            DefaultComboBoxModel<String> model2 = new DefaultComboBoxModel<>();
             // recorrer la lista de códigos ordenada y agregar cada código al modelo usando el método addElement
             for (String code : codesCountry) {
                 model.addElement(code);
+                model2.addElement(code);
             }
             // asignar el modelo al JComboBox usando el método setModel
             this.comboBox1.setModel(model);
-            this.comboBox2.setModel(model);
+            this.comboBox2.setModel(model2);
         } catch (JSONException e) {
             // manejar la excepción
         }
