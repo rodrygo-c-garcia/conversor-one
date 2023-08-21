@@ -57,7 +57,7 @@ public class Inicio extends JFrame {
 
                 // cerrar el objeto scanner usando el método close(
                 scanner.close();
-                rellenarCombobox(informacion);
+                fillCombobox(informacion);
                 System.out.println(informacion);
             }
         }catch (Exception e) {
@@ -65,7 +65,7 @@ public class Inicio extends JFrame {
         }
     }
 
-    void rellenarCombobox(StringBuilder informacion) throws JSONException {
+    void fillCombobox(StringBuilder informacion) throws JSONException {
         // crear un objeto JSONObject con la cadena informacion
         JSONObject json = new JSONObject(informacion.toString());
         try {
