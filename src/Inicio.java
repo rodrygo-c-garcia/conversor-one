@@ -23,10 +23,10 @@ public class Inicio extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setContentPane(panelMain);
-        fillCombobox();
+        connectAPI();
     }
 
-    public void fillCombobox(){
+    public void connectAPI(){
         try {
             // crear un objeto URL con el valor de la enumeración URLEnum.API_URL, que contiene la dirección de la API
             URL url = new URL(URLEnum.API_URL.getValue());
