@@ -21,7 +21,7 @@ public class Inicio extends JFrame {
     private JComboBox<String> comboBox2;
     private JTextField txt1;
     private JTextField txt2;
-    
+    private String baseCurrency;
 
     public Inicio() {
         super("Conversor ONE");
@@ -127,12 +127,20 @@ public class Inicio extends JFrame {
                 // comprobar si el evento es de tipo selección
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     // obtener el valor seleccionado en el JComboBox
-                    String baseCurrency = (String) e.getItem();
+                    setBaseCurrency((String) e.getItem());
                     // imprimir el valor seleccionado en la consola
-                    txt2.setText(baseCurrency);
+                    txt2.setText(getBaseCurrency());
 //                    System.out.println("El código seleccionado es: " + selectedCode);
                 }
             }
         });
+    }
+
+    public void setBaseCurrency(String baseCurrency){
+        this.baseCurrency = baseCurrency;
+    }
+
+    public String getBaseCurrency(){
+        return this.baseCurrency;
     }
 }
