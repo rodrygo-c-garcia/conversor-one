@@ -22,10 +22,11 @@ public class Inicio extends JFrame {
     private JTextField txt1;
     private JTextField txt2;
     private String baseCurrency;
+    private String currency;
 
     public Inicio() {
         super("Conversor ONE");
-        setSize(600, 300);
+        setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -33,7 +34,8 @@ public class Inicio extends JFrame {
 
         //  funciones de la funcionalidad del sistema
         connectAPI();
-        selectedCodeCountry();
+        selectedCodeBaseCountry();
+        selectedCurrency();
 
     }
 
@@ -108,7 +110,7 @@ public class Inicio extends JFrame {
             }
             // asignar el modelo al JComboBox usando el método setModel
             this.comboBox1.setModel(model);
-
+            this.comboBox2.setModel(model);
         } catch (JSONException e) {
             // manejar la excepción
         }
@@ -120,7 +122,7 @@ public class Inicio extends JFrame {
         return codesCountry;
     }
 
-    public void selectedCodeCountry(){
+    public void selectedCodeBaseCountry(){
         comboBox1.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -142,5 +144,14 @@ public class Inicio extends JFrame {
 
     public String getBaseCurrency(){
         return this.baseCurrency;
+    }
+
+    public void selectedCurrency(){
+        comboBox2.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+
+            }
+        });
     }
 }
