@@ -3,9 +3,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Inicio extends JFrame {
     private JPanel panelMain;
