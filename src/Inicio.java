@@ -1,11 +1,18 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Inicio extends JFrame {
     private JPanel panelMain;
@@ -14,18 +21,24 @@ public class Inicio extends JFrame {
     private JComboBox<String> comboBox2;
     private JTextField txt1;
     private JTextField txt2;
+    private String baseCurrency;
+    private String currency;
 
     public Inicio() {
         super("Conversor ONE");
-        setSize(600, 300);
+        setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
         setContentPane(panelMain);
-        fillCombobox();
+        //  funciones de la funcionalidad del sistema
+        connectAPI();
+        selectedCodeBaseCountry();
+        selectedCurrency();
+
     }
 
-    public void fillCombobox(){
+    public void connectAPI(){
         try {
             // crear un objeto URL con el valor de la enumeración URLEnum.API_URL, que contiene la dirección de la API
             URL url = new URL(URLEnum.API_URL.getValue());
@@ -56,11 +69,100 @@ public class Inicio extends JFrame {
 
                 // cerrar el objeto scanner usando el método close(
                 scanner.close();
-
+                fillCombobox(informacion);
                 System.out.println(informacion);
             }
         }catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    void fillCombobox(StringBuilder informacion) throws JSONException {
+        try {
+            // crear un objeto JSONObject con la cadena informacion
+            JSONObject json = new JSONObject(informacion.toString());
+            // obtener el objeto JSONObject asociado a la clave "data"
+            JSONObject data = json.getJSONObject("data");
+            // obtener un iterador de las claves del objeto data
+            Iterator<String> keys = data.keys();
+            // crear una lista de cadenas para almacenar los códigos de los países
+            List<String> codesCountry = new ArrayList<>();
+
+            // crear una lista de cadenas con los códigos de las monedas que quieres agregar
+            List<String> desiredCodes = Arrays.asList("USD", "BOB", "EUR", "GBP", "JPY", "KRW");
+            // mientras haya más claves por recorrer, agregar cada clave al modelo usando el método addItem
+            while(keys.hasNext()) {
+                String key = keys.next();
+
+                if(desiredCodes.contains(key)){
+                    codesCountry.add(key);
+                }
+            }
+            System.out.println("Desordenado: " + codesCountry);
+            // ordenar la lista de códigos alfabéticamente usando el método sort
+            codesCountry = orderCodeCountry(codesCountry);
+            // crear un objeto DefaultComboBoxModel para almacenar los códigos de los países
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+            DefaultComboBoxModel<String> model2 = new DefaultComboBoxModel<>();
+            // recorrer la lista de códigos ordenada y agregar cada código al modelo usando el método addElement
+            for (String code : codesCountry) {
+                model.addElement(code);
+                model2.addElement(code);
+            }
+            // asignar el modelo al JComboBox usando el método setModel
+            this.comboBox1.setModel(model);
+            this.comboBox2.setModel(model2);
+        } catch (JSONException e) {
+            // manejar la excepción
+        }
+    }
+
+    public List<String> orderCodeCountry(List<String> codesCountry){
+        Collections.sort(codesCountry);
+        System.out.println("Ordenado: " + codesCountry);
+        return codesCountry;
+    }
+
+    public void selectedCodeBaseCountry(){
+        comboBox1.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                // comprobar si el evento es de tipo selección
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    // obtener el valor seleccionado en el JComboBox
+                    setBaseCurrency((String) e.getItem());
+                    // imprimir el valor seleccionado en la consola
+                    txt2.setText(getBaseCurrency());
+//                    System.out.println("El código seleccionado es: " + selectedCode);
+                }
+            }
+        });
+    }
+
+    public void setBaseCurrency(String baseCurrency){ this.baseCurrency = baseCurrency; }
+    public String getBaseCurrency(){ return this.baseCurrency;}
+
+    public void selectedCurrency(){
+        comboBox2.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                // comprobar si el evento es de tipo selección
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    // obtener el valor seleccionado en el JComboBox
+                    setCurrency((String) e.getItem());
+                    // imprimir el valor seleccionado en la consola
+                    txt2.setText(getCurrency());
+//                    System.out.println("El código seleccionado es: " + selectedCode);
+                }
+            }
+        });
+    }
+
+    public void setCurrency(String currency){
+        this.currency = currency;
+    }
+
+    public String getCurrency(){
+        return this.currency;
     }
 }
