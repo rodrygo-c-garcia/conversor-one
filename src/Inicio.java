@@ -66,9 +66,9 @@ public class Inicio extends JFrame {
     }
 
     void fillCombobox(StringBuilder informacion) throws JSONException {
-        // crear un objeto JSONObject con la cadena informacion
-        JSONObject json = new JSONObject(informacion.toString());
         try {
+            // crear un objeto JSONObject con la cadena informacion
+            JSONObject json = new JSONObject(informacion.toString());
             // obtener el objeto JSONObject asociado a la clave "data"
             JSONObject data = json.getJSONObject("data");
             // obtener un iterador de las claves del objeto data
@@ -83,8 +83,7 @@ public class Inicio extends JFrame {
             }
             System.out.println("Desordenado: " + codesCountry);
             // ordenar la lista de códigos alfabéticamente usando el método sort
-            Collections.sort(codesCountry);
-            System.out.println("Ordenado: " + codesCountry);
+            codesCountry = orderCodeCountry(codesCountry);
             // crear un objeto DefaultComboBoxModel para almacenar los códigos de los países
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
             // recorrer la lista de códigos ordenada y agregar cada código al modelo usando el método addElement
@@ -96,5 +95,11 @@ public class Inicio extends JFrame {
         } catch (JSONException e) {
             // manejar la excepción
         }
+    }
+
+    public List<String> orderCodeCountry(List<String> codesCountry){
+        Collections.sort(codesCountry);
+        System.out.println("Ordenado: " + codesCountry);
+        return codesCountry;
     }
 }
