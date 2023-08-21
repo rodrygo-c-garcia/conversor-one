@@ -73,8 +73,8 @@ public class Inicio extends JFrame {
 
                 // cerrar el objeto scanner usando el método close(
                 scanner.close();
+                System.out.println("API: " + informacion);
                 fillCombobox(informacion);
-                System.out.println(informacion);
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -129,6 +129,7 @@ public class Inicio extends JFrame {
 
     public void selectedCodeBaseCountry(){
         comboBox1.addItemListener(new ItemListener() {
+
             @Override
             public void itemStateChanged(ItemEvent e) {
                 // comprobar si el evento es de tipo selección
@@ -137,7 +138,7 @@ public class Inicio extends JFrame {
                     setBaseCurrency((String) e.getItem());
                     // imprimir el valor seleccionado en la consola
                     txt2.setText(getBaseCurrency());
-//                    System.out.println("El código seleccionado es: " + selectedCode);
+                    obtainCurrency();
                 }
             }
         });
@@ -155,18 +156,64 @@ public class Inicio extends JFrame {
                     // obtener el valor seleccionado en el JComboBox
                     setCurrency((String) e.getItem());
                     // imprimir el valor seleccionado en la consola
-                    txt2.setText(getCurrency());
-//                    System.out.println("El código seleccionado es: " + selectedCode);
+                    System.out.println("El código seleccionado es: " + getCurrency());
+                    obtainCurrency();
                 }
             }
         });
     }
 
-    public void setCurrency(String currency){
-        this.currency = currency;
+    public void setCurrency(String currency){ this.currency = currency; }
+    public String getCurrency(){ return this.currency; }
+
+    public void obtainCurrency(){
+        try {
+            // crear un objeto URL con el valor de la enumeración URLEnum.API_URL, que contiene la dirección de la API
+            URL url = new URL(apiClient.getBaseUrl() + "?apikey=" + apiClient.getApiKey() + "&currencies=" + getCurrency() + "&base_currency=" + getBaseCurrency());
+            // abrir una conexión HttpURLConnection con el objeto URL
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            // establecer el método de solicitud en GET
+            con.setRequestMethod("GET");
+            // iniciar la conexión con la API
+            con.connect();
+            // obtener el código de respuesta de la conexión, que indica el estado de la misma
+            int responseCode = con.getResponseCode();
+
+            // si el estado es distinto de 200 lanzamos un error
+            if(responseCode != 200) {
+                throw new RuntimeException("HttpResponseCode: " + responseCode);
+            } else {
+                // si el código de respuesta es 200, que significa que la conexión fue exitosa, proceder a leer los datos que devuelve la API
+
+                // crear un objeto StringBuilder llamado informacion para almacenar los datos de la API como una cadena
+                StringBuilder informacion = new StringBuilder();
+                // crear un objeto Scanner llamado scanner para leer el flujo de entrada (InputStream) que se abre desde el objeto URL
+                Scanner scanner = new Scanner(url.openStream());
+
+                // mientras haya más líneas por leer en el flujo de entrada, agregar cada línea al objeto informacion usando el método append()
+                while(scanner.hasNext()) {
+                    informacion.append(scanner.nextLine());
+                }
+
+                // cerrar el objeto scanner usando el método close(
+                scanner.close();
+                System.out.println("Value Informacion: " + informacion);
+                System.out.println(apiClient.getBaseUrl() + "?apikey=" + apiClient.getApiKey() + "&curriencies=" + getCurrency() + "&base_currency=" + getBaseCurrency());
+                // crear un objeto JSONObject con la cadena informacion
+                JSONObject json = new JSONObject(informacion.toString());
+                // obtener el objeto JSONObject asociado a la clave "data"
+                JSONObject data = json.getJSONObject("data");
+                // obtener el objeto JSONObject asociado a la clave
+                JSONObject afn = data.getJSONObject(getCurrency());
+                // obtener el valor de la divisa de Afganistán
+                this.value = afn.getDouble("value");
+                txt2.setText(value + getCurrency());
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public String getCurrency(){
-        return this.currency;
-    }
+    public void setValue(double value){ this.value = value; }
+    public double getValue(){ return this.value; }
 }
