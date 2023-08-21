@@ -154,4 +154,12 @@ public class Inicio extends JFrame {
             }
         });
     }
+
+    public void setCurrency(String currency){
+        this.currency = currency;
+    }
+
+    public String getCurrency(){
+        return this.currency;
+    }
 }
