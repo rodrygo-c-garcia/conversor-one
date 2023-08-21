@@ -139,19 +139,21 @@ public class Inicio extends JFrame {
         });
     }
 
-    public void setBaseCurrency(String baseCurrency){
-        this.baseCurrency = baseCurrency;
-    }
-
-    public String getBaseCurrency(){
-        return this.baseCurrency;
-    }
+    public void setBaseCurrency(String baseCurrency){ this.baseCurrency = baseCurrency; }
+    public String getBaseCurrency(){ return this.baseCurrency;}
 
     public void selectedCurrency(){
         comboBox2.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-
+                // comprobar si el evento es de tipo selección
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    // obtener el valor seleccionado en el JComboBox
+                    setCurrency((String) e.getItem());
+                    // imprimir el valor seleccionado en la consola
+                    txt2.setText(getCurrency());
+//                    System.out.println("El código seleccionado es: " + selectedCode);
+                }
             }
         });
     }
