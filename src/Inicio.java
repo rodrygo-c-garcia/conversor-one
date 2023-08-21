@@ -1,9 +1,15 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +21,7 @@ public class Inicio extends JFrame {
     private JComboBox<String> comboBox2;
     private JTextField txt1;
     private JTextField txt2;
+    
 
     public Inicio() {
         super("Conversor ONE");
@@ -23,7 +30,11 @@ public class Inicio extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setContentPane(panelMain);
+
+        //  funciones de la funcionalidad del sistema
         connectAPI();
+        selectedCodeCountry();
+
     }
 
     public void connectAPI(){
@@ -76,10 +87,15 @@ public class Inicio extends JFrame {
             // crear una lista de cadenas para almacenar los códigos de los países
             List<String> codesCountry = new ArrayList<>();
 
+            // crear una lista de cadenas con los códigos de las monedas que quieres agregar
+            List<String> desiredCodes = Arrays.asList("USD", "BOB", "EUR", "GBP", "JPY", "KRW");
             // mientras haya más claves por recorrer, agregar cada clave al modelo usando el método addItem
             while(keys.hasNext()) {
                 String key = keys.next();
-                codesCountry.add(key);
+
+                if(desiredCodes.contains(key)){
+                    codesCountry.add(key);
+                }
             }
             System.out.println("Desordenado: " + codesCountry);
             // ordenar la lista de códigos alfabéticamente usando el método sort
@@ -92,6 +108,7 @@ public class Inicio extends JFrame {
             }
             // asignar el modelo al JComboBox usando el método setModel
             this.comboBox1.setModel(model);
+
         } catch (JSONException e) {
             // manejar la excepción
         }
@@ -101,5 +118,21 @@ public class Inicio extends JFrame {
         Collections.sort(codesCountry);
         System.out.println("Ordenado: " + codesCountry);
         return codesCountry;
+    }
+
+    public void selectedCodeCountry(){
+        comboBox1.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                // comprobar si el evento es de tipo selección
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    // obtener el valor seleccionado en el JComboBox
+                    String baseCurrency = (String) e.getItem();
+                    // imprimir el valor seleccionado en la consola
+                    txt2.setText(baseCurrency);
+//                    System.out.println("El código seleccionado es: " + selectedCode);
+                }
+            }
+        });
     }
 }
