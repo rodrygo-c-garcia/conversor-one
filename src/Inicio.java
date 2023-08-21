@@ -57,11 +57,44 @@ public class Inicio extends JFrame {
 
                 // cerrar el objeto scanner usando el método close(
                 scanner.close();
-
+                rellenarCombobox(informacion);
                 System.out.println(informacion);
             }
         }catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    void rellenarCombobox(StringBuilder informacion) throws JSONException {
+        // crear un objeto JSONObject con la cadena informacion
+        JSONObject json = new JSONObject(informacion.toString());
+        try {
+            // obtener el objeto JSONObject asociado a la clave "data"
+            JSONObject data = json.getJSONObject("data");
+            // obtener un iterador de las claves del objeto data
+            Iterator<String> keys = data.keys();
+            // crear una lista de cadenas para almacenar los códigos de los países
+            List<String> codesCountry = new ArrayList<>();
+
+            // mientras haya más claves por recorrer, agregar cada clave al modelo usando el método addItem
+            while(keys.hasNext()) {
+                String key = keys.next();
+                codesCountry.add(key);
+            }
+            System.out.println("Desordenado: " + codesCountry);
+            // ordenar la lista de códigos alfabéticamente usando el método sort
+            Collections.sort(codesCountry);
+            System.out.println("Ordenado: " + codesCountry);
+            // crear un objeto DefaultComboBoxModel para almacenar los códigos de los países
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+            // recorrer la lista de códigos ordenada y agregar cada código al modelo usando el método addElement
+            for (String code : codesCountry) {
+                model.addElement(code);
+            }
+            // asignar el modelo al JComboBox usando el método setModel
+            this.comboBox1.setModel(model);
+        } catch (JSONException e) {
+            // manejar la excepción
         }
     }
 }
