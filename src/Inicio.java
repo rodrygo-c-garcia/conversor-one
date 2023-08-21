@@ -21,8 +21,12 @@ public class Inicio extends JFrame {
     private JComboBox<String> comboBox2;
     private JTextField txt1;
     private JTextField txt2;
-    private String baseCurrency;
-    private String currency;
+
+    // data for the API
+    private String baseCurrency = "BOB";
+    private String currency = "BOB";
+    private double value = 1.0;
+    private ApiClient apiClient;
 
     public Inicio() {
         super("Conversor ONE");
