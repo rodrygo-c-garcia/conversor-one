@@ -60,7 +60,7 @@ public class Inicio extends JFrame {
     public void startCountries(){
         this.diccionario = new HashMap<>(10, 0.8f);
         // Insertar el par ("USD", "Dólar estadounidense de Estados Unidos") en el HashMap
-        diccionario.put("USD", "Dólar estadounidense de Estados Unidos");
+        diccionario.put("USD", "Dólar estadounidense de USA");
 
         // Insertar el par ("BOB", "Boliviano de Bolivia") en el HashMap
         diccionario.put("BOB", "Boliviano de Bolivia");
