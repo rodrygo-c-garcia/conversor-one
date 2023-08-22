@@ -21,6 +21,8 @@ public class Inicio extends JFrame {
     private JComboBox<String> comboBox2;
     private JTextField txt1;
     private JTextField txt2;
+    private JLabel labelCurrencyBase;
+    private JLabel labelCurrency;
 
     // data for the API
     private String baseCurrency = "BOB";
@@ -31,11 +33,12 @@ public class Inicio extends JFrame {
 
     public Inicio() {
         super("Conversor ONE");
-        setSize(400, 200);
+        setSize(450, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
         setContentPane(panelMain);
+        txt2.setText("Cargando...");
         //  funciones de la funcionalidad del sistema
         apiClient = new ApiClient();
         connectAPI();
@@ -205,8 +208,6 @@ public class Inicio extends JFrame {
 
                 // cerrar el objeto scanner usando el método close(
                 scanner.close();
-                System.out.println("Value Informacion: " + informacion);
-                System.out.println(apiClient.getBaseUrl() + "?apikey=" + apiClient.getApiKey() + "&curriencies=" + getCurrency() + "&base_currency=" + getBaseCurrency());
                 // crear un objeto JSONObject con la cadena informacion
                 JSONObject json = new JSONObject(informacion.toString());
                 // obtener el objeto JSONObject asociado a la clave "data"
@@ -254,11 +255,9 @@ public class Inicio extends JFrame {
                     // Calcular el resultado y mostrarlo en el campo txt2
                     double value = getValueQuantity() * getValueCurrency();
                     txt2.setText((Math.round(value * 100000) / 100000.0) + getCurrency());
-                    System.out.println(getValueCurrency());
-                    System.out.println(getValueQuantity());
                 } catch (NumberFormatException ex) {
                     // Si el texto no es un número válido, mostrar un mensaje de error
-                    txt2.setText("Por favor, ingrese un número válido");
+                    txt2.setText("Ingrese un número válido");
                 }
             }
         };
