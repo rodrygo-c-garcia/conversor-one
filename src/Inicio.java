@@ -25,7 +25,8 @@ public class Inicio extends JFrame {
     // data for the API
     private String baseCurrency = "BOB";
     private String currency = "BOB";
-    private double value = 1.0;
+    private double valueCurrency = 1.0;
+    private double valueQuantity = 1.0;
     private ApiClient apiClient;
 
     public Inicio() {
