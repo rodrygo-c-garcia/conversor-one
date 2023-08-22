@@ -214,8 +214,8 @@ public class Inicio extends JFrame {
                 // obtener el objeto JSONObject asociado a la clave
                 JSONObject afn = data.getJSONObject(getCurrency());
                 // obtener el valor de la divisa de Afganistán
-                this.valueCurrency = afn.getDouble("value");
-                txt2.setText((Math.round(valueCurrency * 1000) / 1000.0) + getCurrency());
+                setValueCurrency(afn.getDouble("value"));
+                txt2.setText(((Math.round(this.valueCurrency * 100000) * getValueQuantity()) / 100000.0) + getCurrency());
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -250,15 +250,24 @@ public class Inicio extends JFrame {
             public void updateText() {
                 // Intentar convertirlo a un número
                 try {
-                    setValueCurrency(Double.parseDouble(txt1.getText()));
+                    setValueQuantity(Double.parseDouble(txt1.getText()));
                     // Calcular el resultado y mostrarlo en el campo txt2
-                    double result = Double.parseDouble(txt2.getText()) * getValueCurrency();
-                    txt2.setText(result + getCurrency());
+                    double value = getValueQuantity() * getValueCurrency();
+                    txt2.setText((Math.round(value * 100000) / 100000.0) + getCurrency());
+                    System.out.println(getValueCurrency());
+                    System.out.println(getValueQuantity());
                 } catch (NumberFormatException ex) {
                     // Si el texto no es un número válido, mostrar un mensaje de error
                     txt2.setText("Por favor, ingrese un número válido");
                 }
             }
         };
+    }
+
+    public void setValueQuantity(double valueQuantity) {
+        this.valueQuantity = valueQuantity;
+    }
+    public double getValueQuantity() {
+        return this.valueQuantity;
     }
 }
