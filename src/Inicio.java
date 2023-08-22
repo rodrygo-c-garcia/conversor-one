@@ -36,7 +36,7 @@ public class Inicio extends JFrame {
 
     public Inicio() {
         super("Conversor ONE");
-        setSize(450, 300);
+        setSize(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
