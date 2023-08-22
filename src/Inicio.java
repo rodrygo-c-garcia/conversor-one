@@ -147,7 +147,6 @@ public class Inicio extends JFrame {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     // obtener el valor seleccionado en el JComboBox
                     setBaseCurrency((String) e.getItem());
-                    // imprimir el valor seleccionado en la consola
                     txt2.setText(getBaseCurrency());
                     obtainCurrency();
                 }
@@ -166,8 +165,8 @@ public class Inicio extends JFrame {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     // obtener el valor seleccionado en el JComboBox
                     setCurrency((String) e.getItem());
+                    txt2.setText("Cargando...");
                     // imprimir el valor seleccionado en la consola
-                    System.out.println("El código seleccionado es: " + getCurrency());
                     obtainCurrency();
                 }
             }
