@@ -1,9 +1,8 @@
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -11,6 +10,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,16 +36,22 @@ public class Inicio extends JFrame {
         setVisible(true);
         setContentPane(panelMain);
         //  funciones de la funcionalidad del sistema
+        apiClient = new ApiClient();
         connectAPI();
         selectedCodeBaseCountry();
         selectedCurrency();
 
+
+        // Crear un objeto DocumentListener que realiza una acción cuando cambia el texto
+        DocumentListener dl = listenJTextField();
+        // Agregar el DocumentListener al campo txt1
+        txt1.getDocument().addDocumentListener(dl);
     }
 
     public void connectAPI(){
         try {
             // crear un objeto URL con el valor de la enumeración URLEnum.API_URL, que contiene la dirección de la API
-            URL url = new URL(URLEnum.API_URL.getValue());
+            URL url = new URL(apiClient.getBaseUrl() + "?apikey=" + apiClient.getApiKey());
             // abrir una conexión HttpURLConnection con el objeto URL
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             // establecer el método de solicitud en GET
@@ -216,4 +222,42 @@ public class Inicio extends JFrame {
 
     public void setValue(double value){ this.value = value; }
     public double getValue(){ return this.value; }
+
+    public DocumentListener listenJTextField(){
+        return new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                // Se llama cuando se inserta texto
+                updateText();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                // Se llama cuando se elimina texto
+                updateText();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                // Se llama cuando se modifica el texto
+                updateText();
+            }
+
+            // Método que realiza la acción deseada cuando cambia el texto
+            public void updateText() {
+                // Obtener el texto del campo txt1
+                String text = txt1.getText();
+                // Intentar convertirlo a un número
+                try {
+                    double value = Double.parseDouble(text);
+                    // Calcular el resultado y mostrarlo en el campo txt2
+                    double result = value * getValue();
+                    txt2.setText(result + getCurrency());
+                } catch (NumberFormatException ex) {
+                    // Si el texto no es un número válido, mostrar un mensaje de error
+                    txt2.setText("Por favor, ingrese un número válido");
+                }
+            }
+        };
+    }
 }
