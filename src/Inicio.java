@@ -123,6 +123,7 @@ public class Inicio extends JFrame {
             // asignar el modelo al JComboBox usando el método setModel
             this.comboBox1.setModel(model);
             this.comboBox2.setModel(model2);
+            obtainCurrency();
         } catch (JSONException e) {
             // manejar la excepción
         }
@@ -213,19 +214,20 @@ public class Inicio extends JFrame {
                 // obtener el objeto JSONObject asociado a la clave
                 JSONObject afn = data.getJSONObject(getCurrency());
                 // obtener el valor de la divisa de Afganistán
-                this.value = afn.getDouble("value");
-                txt2.setText(value + getCurrency());
+                this.valueCurrency = afn.getDouble("value");
+                txt2.setText((Math.round(valueCurrency * 1000) / 1000.0) + getCurrency());
             }
         }catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void setValue(double value){ this.value = value; }
-    public double getValue(){ return this.value; }
+    public void setValueCurrency(double value){ this.valueCurrency = value; }
+    public double getValueCurrency(){ return this.valueCurrency; }
 
     public DocumentListener listenJTextField(){
         return new DocumentListener() {
+
             @Override
             public void insertUpdate(DocumentEvent e) {
                 // Se llama cuando se inserta texto
@@ -246,13 +248,11 @@ public class Inicio extends JFrame {
 
             // Método que realiza la acción deseada cuando cambia el texto
             public void updateText() {
-                // Obtener el texto del campo txt1
-                String text = txt1.getText();
                 // Intentar convertirlo a un número
                 try {
-                    double value = Double.parseDouble(text);
+                    setValueCurrency(Double.parseDouble(txt1.getText()));
                     // Calcular el resultado y mostrarlo en el campo txt2
-                    double result = value * getValue();
+                    double result = Double.parseDouble(txt2.getText()) * getValueCurrency();
                     txt2.setText(result + getCurrency());
                 } catch (NumberFormatException ex) {
                     // Si el texto no es un número válido, mostrar un mensaje de error
