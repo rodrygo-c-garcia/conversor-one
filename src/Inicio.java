@@ -243,12 +243,21 @@ public class Inicio extends JFrame {
                 // obtener el valor de la divisa de Afganistán
                 setValueCurrency(afn.getDouble("value"));
                 txt2.setText(((Math.round(this.valueCurrency * 100000) * getValueQuantity()) / 100000.0) + getCurrency());
+                searchCountry();
             }
         }catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void searchCountry(){
+        String valorBase = diccionario.get(getBaseCurrency());
+        String valorOutput = diccionario.get(getCurrency());
+        // Asignar el valor al JLabel countryNameBase
+        countryNameBase.setText(valorBase);
+        countryNameOutput.setText(valorOutput);
+
+    }
     public void setValueCurrency(double value){ this.valueCurrency = value; }
     public double getValueCurrency(){ return this.valueCurrency; }
 
