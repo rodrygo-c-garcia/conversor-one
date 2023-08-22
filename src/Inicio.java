@@ -23,6 +23,8 @@ public class Inicio extends JFrame {
     private JTextField txt2;
     private JLabel labelCurrencyBase;
     private JLabel labelCurrency;
+    private JLabel countryNameBase;
+    private JLabel countryNameOutput;
 
     // data for the API
     private String baseCurrency = "BOB";
