@@ -85,6 +85,7 @@
         </constraints>
         <properties>
           <editable value="true"/>
+          <text value="1.0"/>
         </properties>
       </component>
       <component id="9b6da" class="javax.swing.JTextField" binding="txt2">
