@@ -21,6 +21,10 @@ public class Inicio extends JFrame {
     private JComboBox<String> comboBox2;
     private JTextField txt1;
     private JTextField txt2;
+    private JLabel labelCurrencyBase;
+    private JLabel labelCurrency;
+    private JLabel countryNameBase;
+    private JLabel countryNameOutput;
 
     // data for the API
     private String baseCurrency = "BOB";
@@ -28,15 +32,19 @@ public class Inicio extends JFrame {
     private double valueCurrency = 1.0;
     private double valueQuantity = 1.0;
     private ApiClient apiClient;
+    HashMap<String, String> diccionario;
 
     public Inicio() {
         super("Conversor ONE");
-        setSize(400, 200);
+        setSize(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
         setContentPane(panelMain);
+        txt2.setText("Cargando...");
+
         //  funciones de la funcionalidad del sistema
+        startCountries();
         apiClient = new ApiClient();
         connectAPI();
         selectedCodeBaseCountry();
@@ -47,6 +55,28 @@ public class Inicio extends JFrame {
         DocumentListener dl = listenJTextField();
         // Agregar el DocumentListener al campo txt1
         txt1.getDocument().addDocumentListener(dl);
+    }
+
+    public void startCountries(){
+        this.diccionario = new HashMap<>(10, 0.8f);
+        // Insertar el par ("USD", "Dólar estadounidense de Estados Unidos") en el HashMap
+        diccionario.put("USD", "Dólar estadounidense de USA");
+
+        // Insertar el par ("BOB", "Boliviano de Bolivia") en el HashMap
+        diccionario.put("BOB", "Boliviano de Bolivia");
+
+        // Insertar el par ("EUR", "Euro de la Unión Europea") en el HashMap
+        diccionario.put("EUR", "Euro de la Unión Europea");
+
+        // Insertar el par ("GBP", "Libra esterlina del Reino Unido") en el HashMap
+        diccionario.put("GBP", "Libra esterlina del Reino Unido");
+
+        // Insertar el par ("JPY", "Yen de Japón") en el HashMap
+        diccionario.put("JPY", "Yen de Japón");
+
+        // Insertar el par ("KRW", "Won surcoreano de Corea del Sur") en el HashMap
+        diccionario.put("KRW", "Won surcoreano de Corea del Sur");
+
     }
 
     public void connectAPI(){
@@ -144,7 +174,6 @@ public class Inicio extends JFrame {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     // obtener el valor seleccionado en el JComboBox
                     setBaseCurrency((String) e.getItem());
-                    // imprimir el valor seleccionado en la consola
                     txt2.setText(getBaseCurrency());
                     obtainCurrency();
                 }
@@ -163,8 +192,8 @@ public class Inicio extends JFrame {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     // obtener el valor seleccionado en el JComboBox
                     setCurrency((String) e.getItem());
+                    txt2.setText("Cargando...");
                     // imprimir el valor seleccionado en la consola
-                    System.out.println("El código seleccionado es: " + getCurrency());
                     obtainCurrency();
                 }
             }
@@ -205,8 +234,6 @@ public class Inicio extends JFrame {
 
                 // cerrar el objeto scanner usando el método close(
                 scanner.close();
-                System.out.println("Value Informacion: " + informacion);
-                System.out.println(apiClient.getBaseUrl() + "?apikey=" + apiClient.getApiKey() + "&curriencies=" + getCurrency() + "&base_currency=" + getBaseCurrency());
                 // crear un objeto JSONObject con la cadena informacion
                 JSONObject json = new JSONObject(informacion.toString());
                 // obtener el objeto JSONObject asociado a la clave "data"
@@ -216,12 +243,21 @@ public class Inicio extends JFrame {
                 // obtener el valor de la divisa de Afganistán
                 setValueCurrency(afn.getDouble("value"));
                 txt2.setText(((Math.round(this.valueCurrency * 100000) * getValueQuantity()) / 100000.0) + getCurrency());
+                searchCountry();
             }
         }catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void searchCountry(){
+        String valorBase = diccionario.get(getBaseCurrency());
+        String valorOutput = diccionario.get(getCurrency());
+        // Asignar el valor al JLabel countryNameBase
+        countryNameBase.setText(valorBase);
+        countryNameOutput.setText(valorOutput);
+
+    }
     public void setValueCurrency(double value){ this.valueCurrency = value; }
     public double getValueCurrency(){ return this.valueCurrency; }
 
@@ -254,11 +290,9 @@ public class Inicio extends JFrame {
                     // Calcular el resultado y mostrarlo en el campo txt2
                     double value = getValueQuantity() * getValueCurrency();
                     txt2.setText((Math.round(value * 100000) / 100000.0) + getCurrency());
-                    System.out.println(getValueCurrency());
-                    System.out.println(getValueQuantity());
                 } catch (NumberFormatException ex) {
                     // Si el texto no es un número válido, mostrar un mensaje de error
-                    txt2.setText("Por favor, ingrese un número válido");
+                    txt2.setText("Ingrese un número válido");
                 }
             }
         };
